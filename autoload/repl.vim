@@ -466,10 +466,25 @@ function! repl#REPLToggle(...)
             endif
             if repl#REPLGetShortName() =~# '.*python.*' && g:repl_python_auto_import
                 let l:code_tobe_sent = []
+				let l:multiline_import = 0
+				let l:multiline_code = ""
                 for l:line_number in range(1, line("$"))
+					let l:include_line = 0
                     let l:gl = repl#Strip(getline(l:line_number))
-                    if l:gl =~# '^import ' || l:gl =~# '^from .* import .*' || l:gl =~# '^sys\.path'
-                        let l:code_tobe_sent = l:code_tobe_sent + [l:gl]
+					if l:multiline_import
+						let l:multiline_code = l:multiline_code . l:gl
+						if l:gl =~# '.*)$'
+							let l:multiline_import = 0
+							let l:code_tobe_sent = l:code_tobe_sent + [l:multiline_code]
+							let l:multiline_code = ''
+						endif
+					elseif l:gl =~# '^import ' || l:gl =~# '^from .* import .*' || l:gl =~# '^sys\.path'
+						if l:gl =~# '.*($'
+							let l:multiline_import = 1
+							let l:multiline_code = l:gl
+						else
+							let l:code_tobe_sent = l:code_tobe_sent + [l:gl]
+						endif
                     endif
                 endfor
                 let l:sn = repl#REPLGetShortName()
