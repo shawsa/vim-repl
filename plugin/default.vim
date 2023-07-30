@@ -43,7 +43,7 @@ if !exists('g:sendtorepl_invoke_key')
 endif
 
 if !exists('g:repl_auto_sends')
-    let g:repl_auto_sends = ['class ', 'def ', 'for ', 'if ', 'while ', 'with ', 'async def', '@', 'try']
+    let g:repl_auto_sends = ['class ', 'def ', 'for ', 'if ', 'while ', 'with ', 'async def', '@', 'try', 'match', 'case']
 endif
 
 if !exists('g:repl_cursor_down')

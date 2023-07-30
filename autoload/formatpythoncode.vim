@@ -78,11 +78,11 @@ function! formatpythoncode#Format_to_repl(codes, pythonprogram, version)
             endif
         endfor
         if repl#StartWith(a:pythonprogram, 'python') || a:pythonprogram ==# 'ptpython'
-            if repl#StartWithAny(l:block[0], ['def ', 'class ', 'for ', 'while ', 'try ', 'if '])
+            if repl#StartWithAny(l:block[0], ['def ', 'class ', 'for ', 'while ', 'try ', 'if ', 'match ', 'case '])
                 let l:newcodes = l:newcodes + ['']
             endif
         else
-            if repl#StartWithAny(l:block[0], ['def ', 'class ', 'for ', 'while ', 'try ', 'if '])
+            if repl#StartWithAny(l:block[0], ['def ', 'class ', 'for ', 'while ', 'try ', 'if ', 'match ', 'case '])
                 if repl#GetIndent(l:block[-1]) - 4 * formatpythoncode#AutoStop(l:block[-1], 'ipython', a:version) == 0
                     let l:newcodes = l:newcodes + ['', '']
                 else

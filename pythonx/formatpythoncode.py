@@ -222,16 +222,20 @@ class pythoncodes:
         if not self.isstartofline(index):
             return False
         line = self.rawcontents[index].strip()
-        if line.startswith("else:"):
+        if any(map(line.startswith,
+                   ["else:", "except ", "except:", "elif "])):
             return False
-        elif line.startswith("except "):
-            return False
-        elif line.startswith("except:"):
-            return False
-        elif line.startswith("elif "):
-            return False
-        else:
-            return True
+        return True
+        # if line.startswith("else:"):
+        #     return False
+        # elif line.startswith("except "):
+        #     return False
+        # elif line.startswith("except:"):
+        #     return False
+        # elif line.startswith("elif "):
+        #     return False
+        # else:
+        #     return True
 
     def seperateintoblocks(self):
         index = 0
@@ -314,46 +318,64 @@ class pythoncodes:
                 if i == len(self.blocks) - 1 and self.codeindent[self.blocks[i][1][-1]][1] == False:
                     pass
                 else:
-                    if self.blocks[i][0][0].startswith('def '):
+                    if any(map(self.blocks[i][0][0].startswith,
+                        ['def ', 'async def ', 'class ', 'for ', 'while ', 'try:', 'if ', 'with ', 'match ', 'case '])):
                         if currentindent - 4 * AutoStop(block[lastline]) == 0:
                             temp += ["", ""]
                         else:
                             temp += [""]
-                    elif self.blocks[i][0][0].startswith('async def '):
-                        if currentindent - 4 * AutoStop(block[lastline]) == 0:
-                            temp += ["", ""]
-                        else:
-                            temp += [""]
-                    elif self.blocks[i][0][0].startswith('class '):
-                        if currentindent - 4 * AutoStop(block[lastline]) == 0:
-                            temp += ["", ""]
-                        else:
-                            temp += [""]
-                    elif self.blocks[i][0][0].startswith('for '):
-                        if currentindent - 4 * AutoStop(block[lastline]) == 0:
-                            temp += ["", ""]
-                        else:
-                            temp += [""]
-                    elif self.blocks[i][0][0].startswith('while '):
-                        if currentindent - 4 * AutoStop(block[lastline]) == 0:
-                            temp += ["", ""]
-                        else:
-                            temp += [""]
-                    elif self.blocks[i][0][0].startswith('try:'):
-                        if currentindent - 4 * AutoStop(block[lastline]) == 0:
-                            temp += ["", ""]
-                        else:
-                            temp += [""]
-                    elif self.blocks[i][0][0].startswith('if '):
-                        if currentindent - 4 * AutoStop(block[lastline]) == 0:
-                            temp += ["", ""]
-                        else:
-                            temp += [""]
-                    elif self.blocks[i][0][0].startswith('with '):
-                        if currentindent - 4 * AutoStop(block[lastline]) == 0:
-                            temp += ["", ""]
-                        else:
-                            temp += [""]
+                    # if self.blocks[i][0][0].startswith('def '):
+                    #     if currentindent - 4 * AutoStop(block[lastline]) == 0:
+                    #         temp += ["", ""]
+                    #     else:
+                    #         temp += [""]
+                    # elif self.blocks[i][0][0].startswith('async def '):
+                    #     if currentindent - 4 * AutoStop(block[lastline]) == 0:
+                    #         temp += ["", ""]
+                    #     else:
+                    #         temp += [""]
+                    # elif self.blocks[i][0][0].startswith('class '):
+                    #     if currentindent - 4 * AutoStop(block[lastline]) == 0:
+                    #         temp += ["", ""]
+                    #     else:
+                    #         temp += [""]
+                    # elif self.blocks[i][0][0].startswith('for '):
+                    #     if currentindent - 4 * AutoStop(block[lastline]) == 0:
+                    #         temp += ["", ""]
+                    #     else:
+                    #         temp += [""]
+                    # elif self.blocks[i][0][0].startswith('while '):
+                    #     if currentindent - 4 * AutoStop(block[lastline]) == 0:
+                    #         temp += ["", ""]
+                    #     else:
+                    #         temp += [""]
+                    # elif self.blocks[i][0][0].startswith('try:'):
+                    #     if currentindent - 4 * AutoStop(block[lastline]) == 0:
+                    #         temp += ["", ""]
+                    #     else:
+                    #         temp += [""]
+                    # elif self.blocks[i][0][0].startswith('if '):
+                    #     if currentindent - 4 * AutoStop(block[lastline]) == 0:
+                    #         temp += ["", ""]
+                    #     else:
+                    #         temp += [""]
+                    # elif self.blocks[i][0][0].startswith('with '):
+                    #     if currentindent - 4 * AutoStop(block[lastline]) == 0:
+                    #         temp += ["", ""]
+                    #     else:
+                    #         temp += [""]
+                    # elif self.blocks[i][0][0].startswith('match '):
+                    #     if currentindent - 4 * AutoStop(block[lastline]) == 0:
+                    #         temp += ["", ""]
+                    #     else:
+                    #         temp += [""]
+                    #     print('mathc' + 'TEST '*5)
+                    # elif self.blocks[i][0][0].startswith('case '):
+                    #     if currentindent - 4 * AutoStop(block[lastline]) == 0:
+                    #         temp += ["", ""]
+                    #     else:
+                    #         temp += [""]
+                    #     print('case' + 'TEST '*5)
                 # print(temp)
                 self.blocks[i] = (temp, self.blocks[i][1])
         elif self.replprogram == "ptpython":
