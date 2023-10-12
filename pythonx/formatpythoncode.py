@@ -219,23 +219,14 @@ class pythoncodes:
             return self.codeindent[index-1][1]
 
     def canbestartofblock(self, index):
+        line = self.rawcontents[index].strip()
+        # print(line)
         if not self.isstartofline(index):
             return False
-        line = self.rawcontents[index].strip()
         if any(map(line.startswith,
-                   ["else:", "except ", "except:", "elif "])):
+                   ["else:", "except ", "except:", "elif ", "):", "]:"])):
             return False
         return True
-        # if line.startswith("else:"):
-        #     return False
-        # elif line.startswith("except "):
-        #     return False
-        # elif line.startswith("except:"):
-        #     return False
-        # elif line.startswith("elif "):
-        #     return False
-        # else:
-        #     return True
 
     def seperateintoblocks(self):
         index = 0
@@ -282,7 +273,6 @@ class pythoncodes:
             for i in range(len(self.blocks)):
                 temp = list()
                 block = self.blocks[i][0]
-                # print(block)
                 lastline = 0
                 lastback = 0
                 for j in range(len(block)):
