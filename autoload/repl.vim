@@ -135,6 +135,16 @@ endfunction
 
 function! repl#REPLGetShortName()
     let l:name = repl#REPLGetName()
+    " Skip launcher prefixes such as `uv run [--flags]` so that
+    " `uv run ipython --profile=vim` is recognized as ipython.
+    let l:words = split(l:name, ' ')
+    if len(l:words) >= 2 && index(['uv', 'poetry', 'pipenv', 'pdm', 'hatch', 'rye'], repl#StringAfter(l:words[0], '/')) != -1 && l:words[1] ==# 'run'
+        let l:words = l:words[2:]
+        while !empty(l:words) && l:words[0] =~# '^-'
+            call remove(l:words, 0)
+        endwhile
+        let l:name = join(l:words, ' ')
+    endif
     let l:temp = split(repl#StringAfter(l:name, '/'), ' ')[0]
     if l:temp ==# 'ptpython'
         return 'ptpython'
